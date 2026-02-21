@@ -68,7 +68,7 @@ function initShapes(minSpeed, maxSpeed, minAngleSpeed, maxAngleSpeed) {
 
         color[entityId] = Math.floor(Math.random() * 0xFFFFFF);
 
-        const shapeType = 2// Math.floor(Math.random() * 3);
+        const shapeType = Math.floor(Math.random() * 2);
         switch (shapeType) {
             case 0:
                 addSquare(entityId);
@@ -268,6 +268,15 @@ function collide() {
                 velocityX[B] = tempX;
                 velocityY[B] = tempY;
             }
+        }
+
+        const result = collision.boundTriangle(posAX, posAY, halfSize, rotationA, width, height);
+        if (result) {
+            const {boundX, boundY, penetrationX, penetrationY} = result;
+            posX[A] += penetrationX;
+            posY[A] += penetrationY;
+            velocityX[A] *= boundX;
+            velocityY[A] *= boundY; 
         }
     }
 }

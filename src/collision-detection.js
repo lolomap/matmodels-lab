@@ -343,3 +343,50 @@ export function collideTriangles(posAX, posAY, posBX, posBY, halfSize, rotationA
 
     return { normalX, normalY, minOverlap };
 }
+
+export function boundTriangle(posX, posY, halfSize, rotation, width, height) {
+    const angles = [
+        rotation,
+        rotation + (2 * Math.PI / 3),
+        rotation + (4 * Math.PI / 3)
+    ];
+
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+
+    for (let i = 0; i < 3; ++i) {
+        const x = posX + halfSize * Math.cos(angles[i]);
+        const y = posY + halfSize * Math.sin(angles[i]);
+
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+    }
+
+    let boundX = 1, boundY = 1;
+    if (minX <= 0) boundX = -1;
+    if (maxX >= width) boundX = -1;
+    if (minY <= 0) boundY = -1;
+    if (maxY >= height) boundY = -1;
+
+    if (boundX > 0 && boundY > 0) {
+        return false;
+    } else {
+        const penetrationLeft   = Math.max(0, -minX);
+        const penetrationRight  = Math.max(0, maxX - width);
+        const penetrationTop    = Math.max(0, -minY);
+        const penetrationBottom = Math.max(0, maxY - height);
+
+        let penetrationX = 0;
+        let penetrationY = 0;
+
+        if (penetrationLeft > 0)   penetrationX = penetrationLeft;
+        if (penetrationRight > 0)  penetrationX = -penetrationRight;
+
+        if (penetrationTop > 0)    penetrationY = penetrationTop;
+        if (penetrationBottom > 0) penetrationY = -penetrationBottom;
+
+        return { boundX, boundY, penetrationX, penetrationY };
+    }
+}
