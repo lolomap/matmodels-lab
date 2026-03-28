@@ -231,7 +231,7 @@ export function boundCircle(posX, posY, radius, width, height) {
 
 
 
-/* Triangles (I can't take it anymore) */
+/* Triangles */
 /* SAT */
 export function collideTriangles(posAX, posAY, posBX, posBY, halfSize, rotationA, rotationB) {
 
